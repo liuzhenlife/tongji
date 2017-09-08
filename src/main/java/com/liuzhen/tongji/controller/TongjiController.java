@@ -51,8 +51,8 @@ public class TongjiController {
         log.setScreenWidth(NumberUtils.toInt(request.getParameter("screenWidth"), 0));//屏幕分辨率的宽 window.screen.width
         log.setScreenHeight(NumberUtils.toInt(request.getParameter("screenHeight"), 0));//屏幕分辨率的高 window.screen.height
         log.setColorDepth(NumberUtils.toInt(request.getParameter("colorDepth"), 0));//你的屏幕设置是 window.screen.colorDepth 位彩色
-        String referer=request.getHeader("Referer");
-        if(StringUtils.isNoneBlank(referer)){
+        String referer = request.getHeader("Referer");
+        if (StringUtils.isNoneBlank(referer)) {
             log.setReferer(referer);
             log.setReferrerHost(IpUtils.getHost(URI.create(referer)).toString());
         }
@@ -61,13 +61,13 @@ public class TongjiController {
         log.setFlashVersion(NumberUtils.toInt(request.getParameter("flashVersion"), 0));
         log.setJavaEnabled(NumberUtils.toInt(request.getParameter("javaEnabled"), 0));
 
-        String url=request.getScheme()+"://";
-        url+=request.getHeader("host");
+        String url = request.getScheme() + "://";
+        url += request.getHeader("host");
         log.setHost(url);
 
-        url+=request.getRequestURI();
-        if(request.getQueryString()!=null) {
-            url+="?"+request.getQueryString();
+        url += request.getRequestURI();
+        if (request.getQueryString() != null) {
+            url += "?" + request.getQueryString();
         }
         log.setUrl(url);
         accessLogRepository.save(log);

@@ -23,6 +23,5 @@ public class Consumer {
         AccessLog log = accessLogRepository.findOne(logId);
         log.setMacAddress(IpUtils.getMacAddress(log.getIp()));
         accessLogRepository.save(log);
-        System.out.println("log = " + log);
     }
 }
