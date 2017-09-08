@@ -1,6 +1,5 @@
 package com.liuzhen.tongji.domain;
 
-import com.liuzhen.tongji.util.ClientOSUtils;
 import com.liuzhen.tongji.util.IpUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,7 +7,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Calendar;
 
 /**
@@ -359,7 +357,7 @@ public class AccessLog implements Serializable {
      *
      * @return: java.lang.String 用户id
      */
-    @Column(name = "USER_ID",  length = 50)
+    @Column(name = "USER_ID", length = 50)
     public java.lang.String getUserId() {
         return this.userId;
     }
@@ -646,7 +644,7 @@ public class AccessLog implements Serializable {
      */
     @Column(name = "SCREEN_HEIGHT", length = 4)
     public java.lang.Integer getScreenHeight() {
-        return this.screenWidth;
+        return this.screenHeight;
     }
 
     /**
