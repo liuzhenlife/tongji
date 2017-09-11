@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.Date;
 
 /**
@@ -62,6 +64,11 @@ public class TongjiController {
         String referer = StringUtils.defaultString(request.getParameter("referer"), "");
 
         if (StringUtils.isNoneBlank(referer)) {
+            try {
+                referer = URLDecoder.decode(referer, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             log.setReferer(referer);
             log.setReferrerHost(IpUtils.getHost(URI.create(referer)).toString());
         }
@@ -72,7 +79,12 @@ public class TongjiController {
 
         URI uri = URI.create(url);
         log.setHost(uri.getHost());
-        log.setUrl(url);
+
+        try {
+            log.setUrl(URLDecoder.decode(url, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         log.setUserId("session:" + request.getSession().getId());
 
