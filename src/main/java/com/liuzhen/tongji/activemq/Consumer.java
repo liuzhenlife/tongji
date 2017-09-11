@@ -3,6 +3,10 @@ package com.liuzhen.tongji.activemq;
 import com.liuzhen.tongji.domain.AccessLog;
 import com.liuzhen.tongji.service.AccessLogRepository;
 import com.liuzhen.tongji.util.IpUtils;
+import com.liuzhen.tongji.util.lbs.BaiduLBSUtils;
+import com.liuzhen.tongji.util.lbs.ip.AddressDetail;
+import com.liuzhen.tongji.util.lbs.ip.BaiduLBSIp;
+import com.liuzhen.tongji.util.lbs.ip.Content;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -22,6 +26,23 @@ public class Consumer {
     public void receiveQueue(String logId) {
         AccessLog log = accessLogRepository.findOne(logId);
         log.setMacAddress(IpUtils.getMacAddress(log.getIp()));
+
+        if(!"0:0:0:0:0:0:0:1".equals(log.getIp()) && !log.getIp().startsWith("192.168")){
+            BaiduLBSIp lbsIp = BaiduLBSUtils.getIpInfo(log.getIp());
+            if (lbsIp.getStatus() == 0) {
+                Content content = lbsIp.getContent();
+                AddressDetail addressDetail = content.getAddress_detail();
+
+                log.setProvince(addressDetail.getProvince());
+                log.setCity(addressDetail.getCity());
+                log.setCityCode(addressDetail.getCity_code());
+                log.setCounty(addressDetail.getDistrict());
+                log.setStreet(addressDetail.getStreet());
+                log.setStreetNumber(addressDetail.getStreet_number());
+                log.setAddress(content.getAddress());
+            }
+        }
+
         accessLogRepository.save(log);
     }
 }
